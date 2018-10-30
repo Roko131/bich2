@@ -1,5 +1,14 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  Bich::DOMAIN            = "#{ENV['APP_NAME'] || 'bich'}.herokuapp.com".freeze
+
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :deliver_with => :deliver, # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
+    :email_prefix => "[BICH] ",
+    :sender_address => %{"notifier" <noreply@email.com>},
+    :exception_recipients => %w{nirrako@gmail.com}
+  }
 
   # Code is not reloaded between requests.
   config.cache_classes = true
