@@ -1,3 +1,26 @@
 // Place all the styles related to the pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#examples{
+  width: 700px;
+
+  .example{
+    padding: 5px;
+    width: 50%;
+    border: 2px solid black;
+    box-sizing: border-box;
+
+    &#before{
+      float: left;
+    }
+    &#after{
+      float: right;
+      border-left: 0;
+    }
+  }
+
+  .bich-addon{
+    color: red;
+  }
+}

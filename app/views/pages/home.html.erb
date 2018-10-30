@@ -6,3 +6,59 @@
 
   <%= submit_tag('Convert File/s') %>
 <% end %>
+<br>
+<br>
+<p>
+This removes 2 things: <br>
+<ul>
+  <li>
+    Narrator: <br>
+    [DOOR OPENED] Hello there => Hello there <br>
+    [LOUD MUSIC] Rock on! => Rock on! <br>
+  </li>
+  <li>Who says what: <br>Lisa: Hi John => Hi john</li>
+</ul>
+</p>
+
+<br>
+<p>
+  This only works on srt format:<br>
+</p>
+<div id="examples">
+  <div id="before" class="example">
+    <p>
+      1<br>
+      00:00:25,999 --> 00:00:26,999<br>
+      <span class="bich-addon">ALEX: </span>Hi Bob<br>
+      <br>
+      2<br>
+      00:00:27,000 --> 00:00:29,400<br>
+      <span class="bich-addon">[DOOR OPENED] </span>Tonight's the night.<br>
+      <br>
+      3<br>
+      00:00:31,400 --> 00:00:35,133<br>
+      And it's going to happen<br>
+      again and again<br>
+      <br>
+    </p>
+  </div>
+
+  <div id="after" class="example">
+    <p>
+      1<br>
+      00:00:25,999 --> 00:00:26,999<br>
+      Hi Bob<br>
+      <br>
+      2<br>
+      00:00:27,000 --> 00:00:29,400<br>
+      Tonight's the night.<br>
+      <br>
+      3<br>
+      00:00:31,400 --> 00:00:35,133<br>
+      And it's going to happen<br>
+      again and again<br>
+      <br>
+    </p>
+  </div>
+
+</div>
