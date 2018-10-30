@@ -1,0 +1,8 @@
+<h1>BICH! - Because I Can Hear!</h1>
+<p>Select files to convert:</p>
+
+<%= form_tag({action: :upload}, multipart: true) do %>
+  <%= file_field_tag 'srt_files[]', multiple: true, required: true %>
+
+  <%= submit_tag('Convert File/s') %>
+<% end %>
