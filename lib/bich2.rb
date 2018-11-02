@@ -3,13 +3,28 @@ class Bich2
   DEFAULT_OUTPUT_FOLDER = 'new_files'
   OLD_FOLDER    = 'old'
 
-  def initialize(srt_text_utf8, narrator: nil)
+  BRACKETS_TYPES_H = {
+    round: {look: '()', regex: '\(.*\)'},
+    box:   {look: '[]', regex: '\[.*\]'},
+    curly: {look: '{}', regex: '\{.*\}'},
+  }.with_indifferent_access
+
+  Rule = Struct.new(:regex, :to, keyword_init: true)
+
+  def initialize(srt_text_utf8, narrator: :default, brackets_types: [:round, :box], rules_h: {}, **options)
     # @srt_text = srt_text_utf8
-    @narrator_regex = case narrator
-    when :easy; /[A-Z -]+: /
-    else /[\w ]+: /
-    end
+    @rules = create_rules(rules_h.merge(narrator: narrator, brackets_types: brackets_types))
+
     @converted_text = convert_text(srt_text_utf8).freeze
+  end
+
+
+  def method
+    if false
+      Bich2.new(File.read('aa.srt'), )
+      reload!
+      puts Bich2.new_from_file_path('aa.srt').export_to_text
+    end
   end
 
   def export_to_text
@@ -47,6 +62,25 @@ class Bich2
 
   private
 
+    def create_rules(rules_h)
+      rules_h.each_with_object([]) do |(rule,args), rules|
+        rules.concat(self.send("get_#{rule}_rules", args))
+      end
+    end
+
+    def get_narrator_rules(narrator)
+      regex = case narrator
+      when :easy; /[A-Z -]+: /
+      else /[\w -]+: /
+      # else /[\w ]+: /
+      end
+      [Rule.new(regex: regex, to: '')]
+    end
+
+    def get_brackets_types_rules(brackets_types)
+      regex = Regexp.new(brackets_types.map{|bracket_type| "(?:#{BRACKETS_TYPES_H[bracket_type][:regex]})"}.join('|'))
+      [Rule.new(regex: regex, to: '')]
+    end
     def convert_text(text)
       text.gsub(/(\d+(?:\r)?\n\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}(?:\r)?\n)(.*?)(?=(?:(?:\r)?\n(?:\r)?\n|(?:\r)?\n\z))/m) do |m|
         "#{$1}#{fix_content($2)}"
@@ -56,8 +90,10 @@ class Bich2
     def fix_content(content)
       rows_array = content.split("\n")
       rows_array.map! do |line|
-        line = line.gsub(/\[.*\]/,'')
-        line = line.gsub(@narrator_regex,'')
+        # line = line.gsub(@brackets_regex,'') if @brackets_regex.present?
+        # line = line.gsub(/\[.*\]/,'')
+        # line = line.gsub(@narrator_regex,'')
+        @rules.each{|rule| line = line.gsub(rule.regex,rule.to)}
 
         fix_spaces(line)
       end.reject! do |line|

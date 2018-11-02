@@ -2,6 +2,42 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+#upload_form{
+  background-color: #eee;
+  border: 2px solid gray;
+  padding: 7px;
+  display: inline-block;
+
+  .segment{
+    margin: 10px 0;
+  }
+  .cb-label{
+    margin-right: 20px;
+    border: 1px solid black;
+    padding: 3px;
+    &:hover{
+      background-color: lightgray;
+      cursor: pointer;
+    }
+  }
+
+  #submit{
+    margin-top: 15px;
+    font-weight: bold;
+    background: forestgreen;
+    padding: 7px;
+    border-radius: 4px;
+    &:hover{
+      opacity: 0.7;
+      cursor: pointer;
+    }
+  }
+}
+
+.bich-addon{
+  color: red;
+}
+
 #examples{
   width: 700px;
 
@@ -18,9 +54,5 @@
       float: right;
       border-left: 0;
     }
-  }
-
-  .bich-addon{
-    color: red;
   }
 }

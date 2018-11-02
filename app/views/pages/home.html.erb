@@ -1,10 +1,20 @@
 <h1>BICH! - Because I Can Hear!</h1>
 <p>Select files to convert:</p>
 
-<%= form_tag({action: :upload}, multipart: true) do %>
+<%= form_tag({action: :upload}, multipart: true, id: :upload_form) do %>
   <%= file_field_tag 'srt_files[]', multiple: true, required: true %>
-
-  <%= submit_tag('Convert File/s') %>
+  <div class="segment">
+    Brackets types to get rid of: <br>
+    <% Bich2::BRACKETS_TYPES_H.each do |bracket_type, bracket_h| %>
+      <%= label_tag nil, class: 'cb-label' do %>
+        <%= check_box_tag('brackets_types[]', bracket_type, true, id: "brackets-type-#{bracket_type}", class: 'brackets-type-cb') %>
+        <%= "#{bracket_type} #{bracket_h[:look]}" %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="segment">
+    <%= submit_tag('Convert File/s', id: 'submit') %>
+  </div>
 <% end %>
 <br>
 <br>
@@ -13,10 +23,10 @@ This removes 2 things: <br>
 <ul>
   <li>
     Narrator: <br>
-    [DOOR OPENED] Hello there => Hello there <br>
-    [LOUD MUSIC] Rock on! => Rock on! <br>
+    <span class="bich-addon">[DOOR OPENED]</span> Hello there => Hello there <br>
+    <span class="bich-addon">(LOUD MUSIC)</span> Rock on! => Rock on! <br>
   </li>
-  <li>Who says what: <br>Lisa: Hi John => Hi john</li>
+  <li>Who says what: <br><span class="bich-addon">Lisa:</span> Hi John => Hi john</li>
 </ul>
 </p>
 
@@ -37,7 +47,7 @@ This removes 2 things: <br>
       <br>
       3<br>
       00:00:31,400 --> 00:00:35,133<br>
-      And it's going to happen<br>
+      <span class="bich-addon">(sigh) </span>And it's going to happen<br>
       again and again<br>
       <br>
     </p>

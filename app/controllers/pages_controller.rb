@@ -6,12 +6,14 @@ class PagesController < ApplicationController
   end
 
   def upload
+    bich_params = get_params_for_bich(params)
+
     if params[:srt_files].size > 1#  multiple files
       compressed_filestream = Zip::OutputStream.write_buffer do |zos|
         params[:srt_files].each do |srt_file|
           zos.put_next_entry srt_file.original_filename
 
-          bich = Bich2.new_from_file_path(srt_file.tempfile.path)
+          bich = Bich2.new_from_file_path(srt_file.tempfile.path, bich_params)
           zos.print bich.export_to_text
         end
       end
@@ -20,11 +22,17 @@ class PagesController < ApplicationController
     else # single file
       srt_file = params[:srt_files].first
       tempfile = srt_file.tempfile
-      bich = Bich2.new_from_file_path(tempfile.path)
+      bich = Bich2.new_from_file_path(tempfile.path, bich_params)
       data, file_name = bich.export_to_text, srt_file.original_filename
     end
 
     send_data data, filename: file_name
   end
+
+  private
+
+    def get_params_for_bich(params)
+      {brackets_types: params[:brackets_types]}
+    end
 
 end
