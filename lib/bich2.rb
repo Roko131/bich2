@@ -89,15 +89,16 @@ class Bich2
 
     def fix_content(content)
       rows_array = content.split("\n")
-      rows_array.map! do |line|
+      rows_array.map! do |line| # applying desired rules
         # line = line.gsub(@brackets_regex,'') if @brackets_regex.present?
         # line = line.gsub(/\[.*\]/,'')
         # line = line.gsub(@narrator_regex,'')
         @rules.each{|rule| line = line.gsub(rule.regex,rule.to)}
 
         fix_spaces(line)
-      end.reject! do |line|
-        line !~ /[\wא-ת]/
+      end.reject! do |line| # rejecting non words lines? (aka empty lines?)
+        # line !~ /[\wא-ת]/ # raised Encoding::CompatibilityError (UTF-8 regexp with ASCII-8BIT string)
+        line !~ /[[:alnum:]]/
         # not(line =~ /[\w]/ || line =~ /[א-ת]/)
       end
       # puts "rows_array: #{rows_array.inspect}"

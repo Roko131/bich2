@@ -16,8 +16,10 @@
     <%= submit_tag('Convert File/s', id: 'submit') %>
   </div>
 <% end %>
-<br>
-<br>
+<p>
+  Can also be used in a script: <br>
+  <pre>curl -F 'srt_file=@path/to/file.srt' https://bich.herokuapp.com/api_upload -o new_file.srt</pre>
+</p>
 <p>
 This removes 2 things: <br>
 <ul>
