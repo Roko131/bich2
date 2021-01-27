@@ -70,8 +70,8 @@ class Bich2
 
     def get_narrator_rules(narrator)
       regex = case narrator
-      when :easy; /[A-Z -]+: /
-      else /[\w -]+: /
+      when :easy; /[A-Z -]+:( |\z|\r|\n)/
+      else /[\w -]+:( |\z|\r|\n)/
       # else /[\w ]+: /
       end
       [Rule.new(regex: regex, to: '')]
@@ -94,6 +94,10 @@ class Bich2
         # line = line.gsub(/\[.*\]/,'')
         # line = line.gsub(@narrator_regex,'')
         @rules.each{|rule| line = line.gsub(rule.regex,rule.to)}
+        # @rules.each{|rule|
+        #   puts "line: #{line.inspect}"
+        #   line = line.gsub(rule.regex,rule.to)
+        # }
 
         fix_spaces(line)
       end.reject! do |line| # rejecting non words lines? (aka empty lines?)
