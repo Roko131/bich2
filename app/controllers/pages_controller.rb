@@ -33,20 +33,33 @@ class PagesController < ApplicationController
 
   # curl -F ‘data=@path/to/local/file’ UPLOAD_ADDRESS
   # curl -F 'srt_file=@/home/nirr/my_apps/dev_apps/bich/aa.srt' lvh.me:3001/api_upload -o new_file.srt
+  # curl -F 'srt_file=@/home/nirr/my_apps/dev_apps/bich/aa.srt' -F remove_css=true lvh.me:3001/api_upload -o new_file.srt
   def api_upload
     # binding.pry
     uploaded_file = params[:srt_file]
     srt_text_utf8 = uploaded_file.read
-    bich = Bich2.new(srt_text_utf8)
+    bich = Bich2.new(srt_text_utf8, remove_css: params[:remove_css])
     data, file_name = bich.export_to_text, uploaded_file.original_filename
 
     send_data data, filename: file_name
   end
 
-  private
 
-    def get_params_for_bich(params)
-      {brackets_types: params[:brackets_types]}
-    end
+  # curl -F 'srt_file=@/home/nirr/my_apps/dev_apps/bich/aa.srt' lvh.me:3001/api_remove_css -o new_file.srt
+  def api_remove_css
+    uploaded_file = params[:srt_file]
+    srt_text_utf8 = uploaded_file.read
+    data, file_name = Bich2.remove_css(srt_text_utf8), uploaded_file.original_filename
+
+    send_data data, filename: file_name
+  end
+
+private
+
+  def get_params_for_bich(params)
+    res = {brackets_types: params[:brackets_types]}
+    res[:remove_css] = true if params[:remove_css]
+    res
+  end
 
 end

@@ -7,9 +7,17 @@
     Brackets types to get rid of: <br>
     <% Bich2::BRACKETS_TYPES_H.each do |bracket_type, bracket_h| %>
       <%= label_tag nil, class: 'cb-label' do %>
-        <%= check_box_tag('brackets_types[]', bracket_type, true, id: "brackets-type-#{bracket_type}", class: 'brackets-type-cb') %>
+        <%= check_box_tag('brackets_types[]', bracket_type, false, id: "brackets-type-#{bracket_type}", class: 'brackets-type-cb') %>
         <%= "#{bracket_type} #{bracket_h[:look]}" %>
       <% end %>
+    <% end %>
+  </div>
+  <br>
+  <div class="segment">
+    <p>Remove CSS tags (removing <%= '<i>,<font>' %>, etc)</p>
+    <%= label_tag nil, class: 'cb-label' do %>
+      <%= check_box_tag('remove_css', 'remove_css', true, id: 'remove-css', class: 'brackets-type-cb') %>
+        Remove CSS
     <% end %>
   </div>
   <div class="segment">
@@ -19,6 +27,8 @@
 <p>
   Can also be used in a script: <br>
   <pre>curl -F 'srt_file=@path/to/file.srt' https://bich.herokuapp.com/api_upload -o new_file.srt</pre>
+  <pre>curl -F 'srt_file=@path/to/file.srt' -F remove_css=true https://bich.herokuapp.com/api_upload -o new_file.srt</pre>
+  <pre>curl -F 'srt_file=@path/to/file.srt' https://bich.herokuapp.com/api_remove_css -o new_file.srt</pre>
 </p>
 <p>
 This removes 2 things: <br>

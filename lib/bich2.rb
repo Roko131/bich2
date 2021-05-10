@@ -11,9 +11,13 @@ class Bich2
 
   Rule = Struct.new(:regex, :to, keyword_init: true)
 
-  def initialize(srt_text_utf8, narrator: :default, brackets_types: [:round, :box], rules_h: {}, **options)
+  def initialize(srt_text_utf8, narrator: :default, brackets_types: [:round, :box], rules_h: {}, remove_css: false, **options)
     # @srt_text = srt_text_utf8
     @rules = create_rules(rules_h.merge(narrator: narrator, brackets_types: brackets_types))
+
+    if remove_css
+      @remove_css = true
+    end
 
     @converted_text = convert_text(srt_text_utf8).freeze
   end
@@ -60,6 +64,10 @@ class Bich2
     # move srt_files to old folder:
   end if false
 
+  def self.remove_css(text)
+    text.gsub(/<\w+(( \w+="[\w# ]+")+)?>/,'').gsub(/<\/\w+>/,'')
+  end
+
   private
 
     def create_rules(rules_h)
@@ -81,7 +89,11 @@ class Bich2
       regex = Regexp.new(brackets_types.map{|bracket_type| "(?:#{BRACKETS_TYPES_H[bracket_type][:regex]})"}.join('|'))
       [Rule.new(regex: regex, to: '')]
     end
+
     def convert_text(text)
+      text = Bich2.remove_css(text) if @remove_css
+      # (?:\d+\n\d\d:\d\d:\d\d,\d\d\d --> \d\d:\d\d:\d\d,\d\d\d\n)(.*?)(?:\n\n|\z)
+      # \d+\n\d\d:\d\d:\d\d,\d\d\d --> \d\d:\d\d:\d\d,\d\d\d\n(.*?)(?:\n\n|\z)
       text.gsub(/(\d+(?:\r)?\n\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}(?:\r)?\n)(.*?)(?=(?:(?:\r)?\n(?:\r)?\n|(?:\r)?\n\z))/m) do |m|
         "#{$1}#{fix_content($2)}"
       end

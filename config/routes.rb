@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   post 'pages/upload'
 
   post 'api_upload', to: 'pages#api_upload'#, as: :grab_hook
+  post 'api_remove_css', to: 'pages#api_remove_css'#, as: :grab_hook
 
 
   root 'pages#home'
