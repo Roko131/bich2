@@ -38,7 +38,9 @@ class PagesController < ApplicationController
     # binding.pry
     uploaded_file = params[:srt_file]
     srt_text_utf8 = uploaded_file.read
-    bich = Bich2.new(srt_text_utf8, remove_css: params[:remove_css])
+    bich_options = {remove_css: params[:remove_css]}
+    bich_options[:narrator] = :easy if params[:narrator_easy]
+    bich = Bich2.new(srt_text_utf8, **bich_options)
     data, file_name = bich.export_to_text, uploaded_file.original_filename
 
     send_data data, filename: file_name
@@ -59,6 +61,7 @@ private
   def get_params_for_bich(params)
     res = {brackets_types: params[:brackets_types]}
     res[:remove_css] = true if params[:remove_css]
+    res[:narrator] = :easy if params[:narrator_easy]
     res
   end
 
