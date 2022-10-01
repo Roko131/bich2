@@ -13,6 +13,8 @@ class PagesController < ApplicationController
     if params[:srt_files].size > 1#  multiple files
       compressed_filestream = Zip::OutputStream.write_buffer do |zos|
         params[:srt_files].each do |srt_file|
+          raise "not supported file type: #{srt_file.original_filename}" and return unless File.extname(srt_file.original_filename) == '.srt'
+
           zos.put_next_entry srt_file.original_filename
 
           bich = Bich2.new_from_file_path(srt_file.tempfile.path, bich_params)
@@ -23,6 +25,8 @@ class PagesController < ApplicationController
       data, file_name = compressed_filestream.read, ZIP_FILE_NAME
     else # single file
       srt_file = params[:srt_files].first
+      raise "not supported file type: #{srt_file.original_filename}" and return unless File.extname(srt_file.original_filename) == '.srt'
+
       tempfile = srt_file.tempfile
       bich = Bich2.new_from_file_path(tempfile.path, bich_params)
       data, file_name = bich.export_to_text, srt_file.original_filename
@@ -37,6 +41,7 @@ class PagesController < ApplicationController
   def api_upload
     # binding.pry
     uploaded_file = params[:srt_file]
+    raise "not supported file type: #{uploaded_file.original_filename}" and return unless File.extname(uploaded_file.original_filename) == '.srt'
     srt_text_utf8 = uploaded_file.read
     bich_options = {remove_css: params[:remove_css]}
     bich_options[:narrator] = :easy if params[:narrator_easy]
