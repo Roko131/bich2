@@ -94,7 +94,7 @@ private
     text = Bich2.remove_css(text) if @remove_css
     # (?:\d+\n\d\d:\d\d:\d\d,\d\d\d --> \d\d:\d\d:\d\d,\d\d\d\n)(.*?)(?:\n\n|\z)
     # \d+\n\d\d:\d\d:\d\d,\d\d\d --> \d\d:\d\d:\d\d,\d\d\d\n(.*?)(?:\n\n|\z)
-    text.gsub(/(\d+(?:\r)?\n\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}(?:\r)?\n)(.*?)(?=(?:(?:\r)?\n(?:\r)?\n|(?:\r)?\n\z))/m) do |m|
+    text.gsub(/(\d+(?:\r)?\n\d{2}:\d{2}:\d{2}[,.]\d{3} --> \d{2}:\d{2}:\d{2}[,.]\d{3}(?:\r)?\n)(.*?)(?=(?:(?:\r)?\n(?:\r)?\n|(?:\r)?\n\z))/m) do |m|
       "#{$1}#{fix_content($2)}"
     end
   end
