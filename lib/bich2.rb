@@ -40,7 +40,7 @@ class Bich2
   end
 
   def self.new_from_file_path(file_path, **options)
-    new(File.open(file_path, 'r:UTF-8').read, options)
+    new(File.open(file_path, 'r:UTF-8').read, options.compact)
   end
 
   def self.run(output_folder: DEFAULT_OUTPUT_FOLDER)
