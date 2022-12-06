@@ -5,6 +5,7 @@ class PagesController < ApplicationController
   ZIP_FILE_NAME = 'srt_files.zip'
 
   def home
+    raise 'bug' if params[:bug]
   end
 
   def upload

@@ -1,13 +1,13 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  Bich::DOMAIN            = "#{ENV['APP_NAME'] || 'bich'}.herokuapp.com".freeze
+  Bich::DOMAIN            = "#{ENV['APP_NAME'] || 'because-i-can-hear'}.onrender.com".freeze
 
   Rails.application.config.middleware.use ExceptionNotification::Rack,
   :email => {
     :deliver_with => :deliver, # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
     :email_prefix => "[BICH] ",
-    :sender_address => %{"notifier" <noreply@email.com>},
-    :exception_recipients => %w{nirrako@gmail.com}
+    :sender_address => %{"notifier" <#{ENV['ERROR_EMAIL']}>},
+    :exception_recipients => [ENV['ERROR_EMAIL']]
   }
 
   # Code is not reloaded between requests.
@@ -29,7 +29,7 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present? || ENV['RENDER'].present?
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier

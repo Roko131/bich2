@@ -5,6 +5,6 @@ ActionMailer::Base.smtp_settings = {
   :user_name      => ENV['SENDGRID_USERNAME'],
   :password       => ENV['SENDGRID_PASSWORD'],
   # :domain         => Bich::DOMAIN,
-  :domain         => "#{ENV['APP_NAME'] || 'bich'}.herokuapp.com",
+  :domain         => "#{ENV['APP_NAME'] || 'because-i-can-hear'}.onrender.com",
   :enable_starttls_auto => true
 }
