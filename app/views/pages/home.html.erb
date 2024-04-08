@@ -92,3 +92,19 @@ This removes 2 things: <br>
   </div>
 
 </div>
+<br>
+<br>
+<br>
+<%= form_tag(fetch_subtitles_path, id: :search_subtitles) do %>
+  <%= label_tag(:filename, 'Search:') %>
+  <%= text_field_tag(:filename, nil, style: 'width: 500px;') %>
+  <br>
+  <%= label_tag(:lang, 'Language:') %>
+  <%= text_field_tag(:lang, 'en') %>
+  <span>i.e en,he</span>
+  <br>
+  <%= label_tag(:amount, 'Amount:') %>
+  <%= number_field_tag(:amount, 1, min: 1, max: 10) %>
+  <br>
+  <%= submit_tag('Submit', id: 'search') %>
+<% end %>
